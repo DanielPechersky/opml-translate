@@ -1,5 +1,6 @@
 from xml.etree import ElementTree
 from itertools import islice
+import translate
 import logging
 
 
@@ -15,10 +16,10 @@ def translate_opml_tree(tree: ElementTree, lang_out: str, lang_in: str='auto'):
         def __init__(self, lang_out, lang_in):
             self.lang_out = lang_out
             self.lang_in = lang_in
+            self.translator = translate.Translator(lang_out, lang_in)
 
         def translate(self, text):
-            raise NotImplementedError()
-
+            return self.translator.translate(text)
 
     root = tree.getroot()
 
@@ -29,7 +30,7 @@ def translate_opml_tree(tree: ElementTree, lang_out: str, lang_in: str='auto'):
 
     translator = Translator(lang_out, lang_in)
 
-    for outline in islice(body.iter(), 1, None):
+    for i, outline in enumerate(islice(body.iter(), 1, None)):
         if outline.tag != 'outline':
             raise InvalidOPMLError(f"Tag is not 'outline' for element in <body>: {outline}")
 
@@ -39,7 +40,7 @@ def translate_opml_tree(tree: ElementTree, lang_out: str, lang_in: str='auto'):
             raise InvalidOPMLError(f"Outline element missing 'text'")
 
         translation = translator.translate(text)
-        logger.info('Translated an outline')
+        logger.info(f"Translated outline {i}")
 
         outline.set('text', translation)
 
