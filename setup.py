@@ -24,8 +24,8 @@ setuptools.setup(
     author="Daniel Pechersky",
     author_email='danny.pechersky@gmail.com',
     description="Translates OPML files",
-    long_description = long_description,
-    long_description_content_types='text/markdown',
+    long_description=long_description,
+    long_description_content_type='text/markdown',
     url='https://github.com/DanielPechersky/opml-translate',
     classifiers=[
         'Development Status :: 3 - Alpha',
